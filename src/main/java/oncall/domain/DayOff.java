@@ -59,6 +59,20 @@ public enum DayOff {
                 .orElse(null);
     }
 
+    public static DayOff getDayOffByMonth(int month) {
+        return Arrays.stream(DayOff.values())
+                .filter(dayOff -> dayOff.month == month)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static boolean containsDay(DayOff dayOff, int day) {
+        if (dayOff.days.contains(day)) {
+            return true;
+        }
+        return false;
+    }
+
     public List<Integer> getDays() {
         return days;
     }
