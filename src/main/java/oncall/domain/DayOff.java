@@ -1,5 +1,6 @@
 package oncall.domain;
 
+import java.util.Arrays;
 import java.util.List;
 
 public enum DayOff {
@@ -22,6 +23,18 @@ public enum DayOff {
     DayOff(int month, List<Integer> days) {
         this.month = month;
         this.days = days;
+    }
+
+    public static List<Integer> getDaysByMonth(int month) {
+        return Arrays.stream(DayOff.values())
+                .filter(dayOff -> dayOff.month == month)
+                .findFirst()
+                .map(DayOff::getDays)
+                .orElse(null);
+    }
+
+    public List<Integer> getDays() {
+        return days;
     }
 }
 
