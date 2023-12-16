@@ -29,25 +29,25 @@ public enum DayOff {
     }
 
     public static List<Integer> initializeMonthDayOff(int month, DayOfWeek startDayOfMonth) {
-        List<Integer> result = new ArrayList<>();
-
         int startDay = startDayOfMonth.getCode();
+        int monthLength = YearMonth.of(2023, month).lengthOfMonth();
+        List<Integer> result = getDayOffs(startDay, monthLength);
+        result.addAll(getDaysByMonth(month));
+        Collections.sort(result);
+        return result;
+    }
 
-        YearMonth yearMonth = YearMonth.of(2023, month);
-        int monthLength = yearMonth.lengthOfMonth();
-
-        if (startDay == DayOfWeek.SATURDAY.getCode() || startDay == DayOfWeek.SUNDAY.getCode()) {
+    private static List<Integer> getDayOffs(int checkDay, int monthLength) {
+        List<Integer> result = new ArrayList<>();
+        if (isWeekend(checkDay)) {
             result.add(1);
         }
         for (int day = 2; day <= monthLength; day++) {
-            startDay = (startDay % 7) + 1;
-            if (startDay == DayOfWeek.SATURDAY.getCode() || startDay == DayOfWeek.SUNDAY.getCode()) {
+            checkDay = (checkDay % 7) + 1;
+            if (isWeekend(checkDay)) {
                 result.add(day);
             }
         }
-
-        result.addAll(getDaysByMonth(month));
-        Collections.sort(result);
         return result;
     }
 
@@ -57,6 +57,10 @@ public enum DayOff {
                 .findFirst()
                 .map(DayOff::getDays)
                 .orElse(null);
+    }
+
+    private static boolean isWeekend(int startDay) {
+        return startDay == DayOfWeek.SATURDAY.getCode() || startDay == DayOfWeek.SUNDAY.getCode();
     }
 
     public static DayOff getDayOffByMonth(int month) {
