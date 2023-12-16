@@ -1,6 +1,9 @@
 package oncall.domain;
 
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public enum DayOff {
@@ -23,6 +26,29 @@ public enum DayOff {
     DayOff(int month, List<Integer> days) {
         this.month = month;
         this.days = days;
+    }
+
+    public static List<Integer> initializeMonthDayOff(int month, DayOfWeek startDayOfMonth) {
+        List<Integer> result = new ArrayList<>();
+
+        int startDay = startDayOfMonth.getCode();
+
+        YearMonth yearMonth = YearMonth.of(2023, month);
+        int monthLength = yearMonth.lengthOfMonth();
+
+        if (startDay == DayOfWeek.SATURDAY.getCode() || startDay == DayOfWeek.SUNDAY.getCode()) {
+            result.add(1);
+        }
+        for (int day = 2; day <= monthLength; day++) {
+            startDay = (startDay % 7) + 1;
+            if (startDay == DayOfWeek.SATURDAY.getCode() || startDay == DayOfWeek.SUNDAY.getCode()) {
+                result.add(day);
+            }
+        }
+
+        result.addAll(getDaysByMonth(month));
+        Collections.sort(result);
+        return result;
     }
 
     public static List<Integer> getDaysByMonth(int month) {
