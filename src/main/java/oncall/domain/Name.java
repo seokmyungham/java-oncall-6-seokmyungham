@@ -1,6 +1,6 @@
 package oncall.domain;
 
-import static oncall.constant.ErrorMessage.NAME_LENGTH_ERROR_MESSAGE;
+import static oncall.constant.ErrorMessage.INVALID_INPUT_ERROR_MESSAGE;
 
 public class Name {
     private final String name;
@@ -12,7 +12,7 @@ public class Name {
 
     private void validateNameLength(String name) {
         if (name.length() > 5) {
-            throw new IllegalArgumentException(NAME_LENGTH_ERROR_MESSAGE);
+            throw new IllegalArgumentException(INVALID_INPUT_ERROR_MESSAGE);
         }
     }
 }
