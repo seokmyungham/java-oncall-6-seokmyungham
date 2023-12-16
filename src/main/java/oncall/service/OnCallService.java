@@ -11,18 +11,18 @@ import oncall.domain.Name;
 
 public class OnCallService {
     public Map<Integer, Name> service(LinkedList<Name> weekdayMembers, LinkedList<Name> dayOffMembers, List<Integer> dayOffs, int month) {
-        Map<Integer, Name> result = new HashMap<>();
+        Map<Integer, Name> workSchedule = new HashMap<>();
         YearMonth yearMonth = YearMonth.of(2023, month);
         for (int day = 1; day <= yearMonth.lengthOfMonth(); day++) {
             boolean isDayOff = dayOffs.contains(day);
             if (isDayOff) {
-                dayOffProcess(day, dayOffMembers, result);
+                dayOffProcess(day, dayOffMembers, workSchedule);
             }
             if (!isDayOff) {
-                weekdayProcess(day, weekdayMembers, result);
+                weekdayProcess(day, weekdayMembers, workSchedule);
             }
         }
-        return result;
+        return workSchedule;
     }
 
     private void dayOffProcess(int day, LinkedList<Name> dayOffMembers, Map<Integer, Name> result) {
