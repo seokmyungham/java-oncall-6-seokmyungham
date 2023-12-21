@@ -1,20 +1,22 @@
 package oncall.view;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import oncall.domain.DayOfWeek;
 import oncall.domain.DayOff;
 import oncall.domain.Name;
 
 public class OutputView {
-    public void printWorkSchedule(int month, Map<Integer, Name> workSchedule, int dayOfWeekCode) {
+    public void printWorkSchedule(int month, Map<Integer, Name> workSchedule, int dayOfWeekCode, List<Integer> dayOffs) {
         for (int day : workSchedule.keySet()) {
             dayOfWeekCode = loopDayOfWeekCode(dayOfWeekCode);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(month + "월 " + day + "일 ");
-            if (isDayOff(month, day)) {
+            if (isDayOff(month, day, dayOffs)) {
                 stringBuilder.append(DayOfWeek.getNameByCode(dayOfWeekCode++) + "(휴일) ");
             }
-            if (!isDayOff(month, day)) {
+            if (!isDayOff(month, day, dayOffs)) {
                 stringBuilder.append(DayOfWeek.getNameByCode(dayOfWeekCode++) + " ");
             }
             stringBuilder.append(workSchedule.get(day).getName());
@@ -29,7 +31,7 @@ public class OutputView {
         return dayOfWeekCode;
     }
 
-    private boolean isDayOff(int month, int day) {
-        return DayOff.containsDay(DayOff.getDayOffByMonth(month), day);
+    private boolean isDayOff(int month, int day, List<Integer> dayOffs) {
+        return DayOff.containsDay(DayOff.getDayOffByMonth(month), day) && Collections.frequency(dayOffs, day) == 1;
     }
 }

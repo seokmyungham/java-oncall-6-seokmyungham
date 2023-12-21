@@ -44,7 +44,7 @@ public class OnCallController {
         List<Integer> dayOffs = onCallService.getDayOffs(month, startDayOfWeek);
 
         Map<Integer, Name> workSchedule = onCallService.service(weekdayMembers, dayOffMembers, dayOffs, month);
-        outputView.printWorkSchedule(month, workSchedule, startDayOfWeek.getCode());
+        outputView.printWorkSchedule(month, workSchedule, startDayOfWeek.getCode(), dayOffs);
     }
 
     private List<String> getMonthAndDayOfWeek() {
