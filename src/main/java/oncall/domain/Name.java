@@ -5,6 +5,8 @@ import static oncall.constant.ErrorMessage.INVALID_INPUT_ERROR_MESSAGE;
 import java.util.Objects;
 
 public class Name {
+    private static final int MAXIMUM_NAME_LENGTH = 5;
+
     private final String name;
 
     public Name(String name) {
@@ -13,7 +15,7 @@ public class Name {
     }
 
     private void validateNameLength(String name) {
-        if (name.length() > 5) {
+        if (name.length() > MAXIMUM_NAME_LENGTH) {
             throw new IllegalArgumentException(INVALID_INPUT_ERROR_MESSAGE);
         }
     }
@@ -24,8 +26,12 @@ public class Name {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Name otherName = (Name) o;
         return Objects.equals(name, otherName.name);
     }

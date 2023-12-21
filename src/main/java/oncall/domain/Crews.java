@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 public class Crews {
+    private final static int MEMBER_MINIMUM_SIZE = 5;
+    private final static int MEMBER_MAXIMUM_SIZE = 35;
+
     private final Deque<Name> crews;
 
     public Crews(List<String> memberNames) {
@@ -17,8 +20,8 @@ public class Crews {
     }
 
     public void validate(List<String> memberNames) {
-        validateMembersSize(memberNames);
-        validateDuplicatedMember(memberNames);
+        validateCrewsSize(memberNames);
+        validateDuplicatedCrew(memberNames);
     }
 
     public Deque<Name> initializeCrews(List<String> memberNames) {
@@ -29,13 +32,13 @@ public class Crews {
         return crews;
     }
 
-    public void validateMembersSize(List<String> memberNames) {
-        if (memberNames.size() < 5 || memberNames.size() > 35) {
+    public void validateCrewsSize(List<String> memberNames) {
+        if (memberNames.size() < MEMBER_MINIMUM_SIZE || memberNames.size() > MEMBER_MAXIMUM_SIZE) {
             throw new IllegalArgumentException(INVALID_INPUT_ERROR_MESSAGE);
         }
     }
 
-    public void validateDuplicatedMember(List<String> memberNames) {
+    public void validateDuplicatedCrew(List<String> memberNames) {
         Set<String> duplicateMask = new HashSet<>(memberNames);
 
         if (memberNames.size() != duplicateMask.size()) {
