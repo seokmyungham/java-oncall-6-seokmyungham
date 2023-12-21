@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import oncall.domain.Crews;
 import oncall.domain.DayOfWeek;
 import oncall.domain.Name;
 import oncall.service.OnCallService;
@@ -32,9 +33,9 @@ public class OnCallController {
         int month = Integer.parseInt(monthAndDayOfWeek.get(0));
         DayOfWeek startDayOfWeek = DayOfWeek.getDayOfWeekByName(monthAndDayOfWeek.get(1));
 
-        Map<String, List<String>> totalMembers = getTotalMembers();
-        LinkedList<Name> weekdayMembers = getMembersByCode(totalMembers, WEEKDAY_CODE);
-        LinkedList<Name> dayOffMembers = getMembersByCode(totalMembers, DAY_OFF_CODE);
+        Map<String, Crews> totalMembers = getTotalMembers();
+        Crews weekdayMembers = totalMembers.get(WEEKDAY_CODE);
+        Crews dayOffMembers = totalMembers.get(DAY_OFF_CODE);
 
         List<Integer> dayOffs = onCallService.getDayOffs(month, startDayOfWeek);
 
@@ -54,11 +55,11 @@ public class OnCallController {
         }
     }
 
-    private Map<String, List<String>> getTotalMembers() {
+    private Map<String, Crews> getTotalMembers() {
         try {
-            List<String> weekdayMembers = getAndValidateWeekdayMembers();
-            List<String> dayOffMembers = getAndValidateDayOffMembers();
-            Map<String, List<String>> totalMembers = new HashMap<>();
+            Crews weekdayMembers = getAndValidateWeekdayMembers();
+            Crews dayOffMembers = getAndValidateDayOffMembers();
+            Map<String, Crews> totalMembers = new HashMap<>();
             totalMembers.put(WEEKDAY_CODE, weekdayMembers);
             totalMembers.put(DAY_OFF_CODE, dayOffMembers);
             return totalMembers;
@@ -68,25 +69,13 @@ public class OnCallController {
         }
     }
 
-    private LinkedList<Name> getMembersByCode(Map<String, List<String>> totalMembers, String dayOffCode) {
-        LinkedList<Name> dayOffMembers = new LinkedList<>();
-        for (String name : totalMembers.get(dayOffCode)) {
-            dayOffMembers.add(new Name(name));
-        }
-        return dayOffMembers;
-    }
-
-    private List<String> getAndValidateDayOffMembers() {
+    private Crews getAndValidateDayOffMembers() {
         List<String> dayOffMembers = InputParser.parseInputByDelimiter(inputView.inputDayOffMembers(), ",");
-        InputValidator.validateMembersSize(dayOffMembers);
-        InputValidator.validateDuplicatedMember(dayOffMembers);
-        return dayOffMembers;
+        return new Crews(dayOffMembers);
     }
 
-    private List<String> getAndValidateWeekdayMembers() {
+    private Crews getAndValidateWeekdayMembers() {
         List<String> weekdayMembers = InputParser.parseInputByDelimiter(inputView.inputWeekdayMembers(), ",");
-        InputValidator.validateMembersSize(weekdayMembers);
-        InputValidator.validateDuplicatedMember(weekdayMembers);
-        return weekdayMembers;
+        return new Crews(weekdayMembers);
     }
 }

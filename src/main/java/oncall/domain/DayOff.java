@@ -12,9 +12,9 @@ public enum DayOff {
     MARCH(3, List.of(1)),
     APRIL(4, List.of()),
     MAY(5, List.of(5)),
-    JUNE(6, List.of()),
+    JUNE(6, List.of(6)),
     JULY(7, List.of()),
-    AUGUST(8, List.of()),
+    AUGUST(8, List.of(15)),
     SEPTEMBER(9, List.of()),
     OCTOBER(10, List.of(3, 9)),
     NOVEMBER(11, List.of()),
@@ -37,14 +37,14 @@ public enum DayOff {
         return result;
     }
 
-    private static List<Integer> getDayOffs(int checkDay, int monthLength) {
+    private static List<Integer> getDayOffs(int dayWeekCode, int monthLength) {
         List<Integer> result = new ArrayList<>();
-        if (isWeekend(checkDay)) {
+        if (isWeekend(dayWeekCode)) {
             result.add(1);
         }
         for (int day = 2; day <= monthLength; day++) {
-            checkDay = (checkDay % 7) + 1;
-            if (isWeekend(checkDay)) {
+            dayWeekCode = (dayWeekCode % 7) + 1;
+            if (isWeekend(dayWeekCode)) {
                 result.add(day);
             }
         }
@@ -71,10 +71,7 @@ public enum DayOff {
     }
 
     public static boolean containsDay(DayOff dayOff, int day) {
-        if (dayOff.days.contains(day)) {
-            return true;
-        }
-        return false;
+        return dayOff.days.contains(day);
     }
 
     public List<Integer> getDays() {

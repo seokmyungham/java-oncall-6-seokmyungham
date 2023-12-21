@@ -6,7 +6,6 @@ import oncall.domain.DayOff;
 import oncall.domain.Name;
 
 public class OutputView {
-
     public void printWorkSchedule(int month, Map<Integer, Name> workSchedule, int dayOfWeekCode) {
         for (int day : workSchedule.keySet()) {
             dayOfWeekCode = loopDayOfWeekCode(dayOfWeekCode);
